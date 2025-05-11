@@ -4,6 +4,7 @@ import com.basic.myspringboot.entity.User;
 import com.basic.myspringboot.exception.BusinessException;
 import com.basic.myspringboot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,10 @@ import java.util.Optional;
 
 //@Controller + @ResponseBody
 @RestController
-@RequiredArgsConstructor //final인 변수를 초기화하는 생성자를 자동으로 생성해주는 역할을 하는 롬복 어노테이션
+@RequiredArgsConstructor
+//final 인 변수를 초기화하는 생성자를 자동으로 생성해주는 역할을 하는 롬복 어노테이션
 @RequestMapping("/api/users")
+@Profile("test")
 public class UserRestController {
     private final UserRepository userRepository;
 
@@ -48,11 +51,11 @@ public class UserRestController {
 //        return optionalUser.map(ResponseEntity::ok)
 //                .orElse(ResponseEntity.notFound().build());
     }
-    @GetMapping("/email/{email}/")
+
+    @GetMapping("/email/{email}/")  //http://localhost:8080/api/users/id/100
     public User getUserByEmail(@PathVariable String email){
         Optional<User> optionalUser = userRepository.findByEmail(email);
-        User existUser =
-                optionalUser.orElseThrow(() -> new BusinessException("User Not Found",HttpStatus.NOT_FOUND));
+        User existUser = getExistUser(optionalUser);
         return existUser;
     }
 
@@ -79,5 +82,6 @@ public class UserRestController {
         return ResponseEntity.ok("User가 삭제 되었습니다!"); //status code 200
         //return ResponseEntity.noContent().build();  //status code 204
     }
+
 
 }

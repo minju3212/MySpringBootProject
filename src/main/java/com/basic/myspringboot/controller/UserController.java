@@ -38,7 +38,7 @@ public class UserController {
         userRepository.save(user);
         model.addAttribute("users", userRepository.findAll());
         return "index";
-//return "redirect:/index";
+        //return "redirect:/index";
     }
 
     @GetMapping("/edit/{id}")
@@ -49,10 +49,10 @@ public class UserController {
         model.addAttribute("user", user);
         return "update-user";
     }
-
     @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") long id,
-                             @Valid @ModelAttribute("user") User user, BindingResult result) {
+    public String updateUser(@PathVariable long id,
+                             @Valid @ModelAttribute("user") User user,
+                             BindingResult result) {
         if (result.hasErrors()) {
             user.setId(id);
             return "update-user";
@@ -68,7 +68,6 @@ public class UserController {
         userRepository.delete(user);
         return "redirect:/index";
     }
-
 
     @GetMapping("/thymeleaf")
     public String leaf(Model model) {
