@@ -24,10 +24,11 @@ class CustomerRepositoryTest {
     @Test
     @Rollback(value = false)
     void testDeleteCustomer() {
-        Customer customer = customerRepository.findById(1L)  //Optional<Customer>
+        Customer customer = customerRepository.findById(10L)  //Optional<Customer>
                 .orElseThrow(() -> new RuntimeException("Customer Not Found"));
         customerRepository.delete(customer);
     }
+
 
     @Test
     @Rollback(value = false)
@@ -42,6 +43,7 @@ class CustomerRepositoryTest {
         assertThat(customer.getCustomerName()).isEqualTo("홍길동");
     }
 
+
     @Test
     void testByNotFoundException() {
         //<X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier)
@@ -52,11 +54,11 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    //Disabled
-    void testFindBy(){
+        //@Disabled
+    void testFindBy() {
         Optional<Customer> optionalCustomer = customerRepository.findById(1L);
         //assertThat(optionalCustomer).isNotEmpty();
-        if(optionalCustomer.isPresent()){
+        if(optionalCustomer.isPresent()) {
             Customer existCustomer = optionalCustomer.get();
             assertThat(existCustomer.getId()).isEqualTo(1L);
         }
@@ -71,12 +73,13 @@ class CustomerRepositoryTest {
         Customer notFoundCustomer = customerRepository.findByCustomerId("A004")
                 .orElseGet(() -> new Customer());
         assertThat(notFoundCustomer.getCustomerName()).isNull();
+
     }
 
     @Test
     @Rollback(value = false) //Rollback 처리하지 마세요!!
     @Disabled
-    void testCreateCustomer(){
+    void testCreateCustomer() {
         //Given (준비 단계)
         Customer customer = new Customer();
         customer.setCustomerId("A002");
@@ -87,5 +90,6 @@ class CustomerRepositoryTest {
         assertThat(addCustomer).isNotNull();
         assertThat(addCustomer.getCustomerName()).isEqualTo("스프링2");
     }
+
 
 }
